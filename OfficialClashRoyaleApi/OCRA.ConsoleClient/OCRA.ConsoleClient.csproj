@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OCRA.OfficialRepository.Contracts\OCRA.Repositories.Official.Contracts.csproj" />
+    <ProjectReference Include="..\OCRA.OfficialRepository\OCRA.Repositories.Official.csproj" />
+  </ItemGroup>
+
+</Project>
