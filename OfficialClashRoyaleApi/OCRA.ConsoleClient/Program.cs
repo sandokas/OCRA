@@ -16,17 +16,18 @@ namespace OCRA.ConsoleClient
 
             CultureInfo culture = new CultureInfo("pt-PT");
             Console.OutputEncoding = Encoding.UTF8;
-            string clan = "#8YQ9828";
+            string clanTag = "#8YQ9828";
 
             IClanRepository clanRepository = new ClanRepository();
-            IList<Member> members = clanRepository.GetClanMembersByTag(clan);
+            IList<Member> members = clanRepository.GetClanMembersByTag(clanTag);
             foreach (Member member in members)
             {
-                Console.WriteLine($"Nome do membro {member.Name} que tem {member.Trophies} e está na arena {member.Arena?.Name.ToString(culture)}. Tem o cargo de {member.Role.ToString()}.");
+                if(Role.Leader == member.Role)
+                    Console.WriteLine($"Nome do membro {member.Name} que tem {member.Trophies} e está na arena {member.Arena?.Name.ToString(culture)}. Tem o cargo de {member.Role.ToString()}.");
             }
 
-            War war = clanRepository.GetCurrentWarByTag(clan);
-            
+            War war = clanRepository.GetCurrentWarByTag(clanTag);
+            Clan clan = clanRepository.GetClanByTag(clanTag);
             if (war.State.Equals("warDay"))
             {
                 Console.WriteLine($"Current clan {war.Clan.Name} war status is {war.State}");
@@ -34,7 +35,14 @@ namespace OCRA.ConsoleClient
                 {
                     Console.WriteLine($"{participant.Name} is currently participating in the war. So far has fought {participant.BattlesPlayed}, earned {participant.CardsEarned} cards and won {participant.Wins} battles.");
                 }
-            } else
+            } else if (war.State.Equals("collectionDay"))
+            {
+                Console.WriteLine($"Current clan {war.Clan.Name} war status is {war.State}");
+                foreach (Participant participant in war.Participants)
+                {
+                    Console.WriteLine($"{participant.Name} is currently participating in the war. So far has fought {participant.BattlesPlayed}, earned {participant.CardsEarned} cards and won {participant.Wins} battles.");
+                }
+            }
             {
                 Console.WriteLine($"Current clan {war.Clan.Name} status is {war.State}");
             }
