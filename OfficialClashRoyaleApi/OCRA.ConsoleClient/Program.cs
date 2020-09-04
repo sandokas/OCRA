@@ -4,47 +4,46 @@ using OCRA.Repositories.Official.Contracts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net.Http;
 using System.Text;
 
 namespace OCRA.ConsoleClient
 {
     class Program
     {
+        public static string GetCurrentIpAddress()
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("https://icanhazip.com");
+            var result = client.GetAsync("").Result;
+            return result.Content.ReadAsStringAsync().Result;
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+
+            Console.WriteLine($"Your IP Address: {GetCurrentIpAddress()}");
 
             CultureInfo culture = new CultureInfo("pt-PT");
             Console.OutputEncoding = Encoding.UTF8;
             string clanTag = "#8YQ9828";
 
             IClanRepository clanRepository = new ClanRepository();
-            IList<Member> members = clanRepository.GetClanMembersByTag(clanTag);
-            foreach (Member member in members)
+
+            Clan clan = clanRepository.GetClanByTag(clanTag);
+            RiverRace riverRace = clanRepository.GetCurrentRiverRaceByTag(clanTag);
+
+            Console.WriteLine($"Current clan {riverRace.Clan.Name} war status is {riverRace.State}");
+            
+            foreach (Participant participant in riverRace.Clan.Participants)
             {
-                if(Role.Leader == member.Role)
-                    Console.WriteLine($"Nome do membro {member.Name} que tem {member.Trophies} e está na arena {member.Arena?.Name.ToString(culture)}. Tem o cargo de {member.Role.ToString()}.");
+                Console.WriteLine($"{participant.Name} is currently participating in the war. So far has earned {participant.Fame} fame, and repaired {participant.RepairPoints} points.");
             }
 
-            War war = clanRepository.GetCurrentWarByTag(clanTag);
-            Clan clan = clanRepository.GetClanByTag(clanTag);
-            if (war.State.Equals("warDay"))
+            foreach (var member in clan.MemberList)
             {
-                Console.WriteLine($"Current clan {war.Clan.Name} war status is {war.State}");
-                foreach (Participant participant in war.Participants)
-                {
-                    Console.WriteLine($"{participant.Name} is currently participating in the war. So far has fought {participant.BattlesPlayed}, earned {participant.CardsEarned} cards and won {participant.Wins} battles.");
-                }
-            } else if (war.State.Equals("collectionDay"))
-            {
-                Console.WriteLine($"Current clan {war.Clan.Name} war status is {war.State}");
-                foreach (Participant participant in war.Participants)
-                {
-                    Console.WriteLine($"{participant.Name} is currently participating in the war. So far has fought {participant.BattlesPlayed}, earned {participant.CardsEarned} cards and won {participant.Wins} battles.");
-                }
-            }
-            {
-                Console.WriteLine($"Current clan {war.Clan.Name} status is {war.State}");
+                Console.WriteLine($"{member.Name} ({member.ExpLevel}) has donated {member.Donations} and received {member.DonationsReceived}. He is in {member.Arena.Name} with {member.Trophies} trophies.");
             }
             
             Console.ReadLine();

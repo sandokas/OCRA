@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Web;
-using Newtonsoft.Json;
 using OCRA.Repositories.Official.Contracts.DTO;
 using OCRA.Repositories.Official.Contracts.Interfaces;
 
@@ -20,7 +20,8 @@ namespace OCRA.Repositories.Official
                 HttpResponseMessage response = client.GetAsync(url).Result;
                 HttpContent content = response.Content;
                 string jsonResponse = content.ReadAsStringAsync().Result;
-                clan = JsonConvert.DeserializeObject<Clan>(jsonResponse);
+                System.IO.File.WriteAllText(@"d:\clan.json", jsonResponse);
+                clan = JsonSerializer.Deserialize<Clan>(jsonResponse, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
             }
 
                 return clan;
@@ -37,7 +38,8 @@ namespace OCRA.Repositories.Official
                 {
                     HttpContent content = response.Content;
                     string jsonResponse = content.ReadAsStringAsync().Result;
-                    ClanMembers clanMembers = JsonConvert.DeserializeObject<ClanMembers>(jsonResponse);
+                    System.IO.File.WriteAllText(@"d:\clanMembers.json", jsonResponse);
+                    ClanMembers clanMembers = JsonSerializer.Deserialize<ClanMembers>(jsonResponse,new JsonSerializerOptions{ PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
                     members = clanMembers.Items;
                 }
 
@@ -45,11 +47,11 @@ namespace OCRA.Repositories.Official
             return members;
         }
 
-        public War GetCurrentWarByTag(string tag)
+        public RiverRace GetCurrentRiverRaceByTag(string tag)
         {
 
-            War war = null;
-            string url = $"v1/clans/{HttpUtility.UrlEncode(tag)}/currentwar";
+            RiverRace riverRace = new RiverRace();
+            string url = $"v1/clans/{HttpUtility.UrlEncode(tag)}/currentriverrace";
             using (HttpClient client = OfficialRestApi.HttpClientFactory())
             {
                 HttpResponseMessage response = client.GetAsync(url).Result;
@@ -57,12 +59,13 @@ namespace OCRA.Repositories.Official
                 {
                     HttpContent content = response.Content;
                     string jsonResponse = content.ReadAsStringAsync().Result;
-                    war = JsonConvert.DeserializeObject<War>(jsonResponse);
+                    System.IO.File.WriteAllText(@"d:\currentriverace.json", jsonResponse);
+                    riverRace = JsonSerializer.Deserialize<RiverRace>(jsonResponse, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
                     ;
                 }
 
             }
-            return war;
+            return riverRace;
 
         }
     }
