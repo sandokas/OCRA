@@ -10,5 +10,7 @@ namespace OCRA.Repositories.Official.Contracts.Interfaces
         IList<Member> GetClanMembersByTag(string tag);
         War GetCurrentWarByTag(string tag);
         Clan GetClanByTag(string tag);
+        void GetCurrentRiverRaceByTag(string tag);
+        void GetLastRiverRaceByTag(string tag);
     }
 }

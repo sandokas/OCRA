@@ -19,34 +19,11 @@ namespace OCRA.ConsoleClient
             string clanTag = "#8YQ9828";
 
             IClanRepository clanRepository = new ClanRepository();
-            IList<Member> members = clanRepository.GetClanMembersByTag(clanTag);
-            foreach (Member member in members)
-            {
-                if(Role.Leader == member.Role)
-                    Console.WriteLine($"Nome do membro {member.Name} que tem {member.Trophies} e está na arena {member.Arena?.Name.ToString(culture)}. Tem o cargo de {member.Role.ToString()}.");
-            }
+            clanRepository.GetClanMembersByTag(clanTag);
+            clanRepository.GetClanByTag(clanTag);
+            clanRepository.GetCurrentRiverRaceByTag(clanTag);
+            clanRepository.GetLastRiverRaceByTag(clanTag);
 
-            War war = clanRepository.GetCurrentWarByTag(clanTag);
-            Clan clan = clanRepository.GetClanByTag(clanTag);
-            if (war.State.Equals("warDay"))
-            {
-                Console.WriteLine($"Current clan {war.Clan.Name} war status is {war.State}");
-                foreach (Participant participant in war.Participants)
-                {
-                    Console.WriteLine($"{participant.Name} is currently participating in the war. So far has fought {participant.BattlesPlayed}, earned {participant.CardsEarned} cards and won {participant.Wins} battles.");
-                }
-            } else if (war.State.Equals("collectionDay"))
-            {
-                Console.WriteLine($"Current clan {war.Clan.Name} war status is {war.State}");
-                foreach (Participant participant in war.Participants)
-                {
-                    Console.WriteLine($"{participant.Name} is currently participating in the war. So far has fought {participant.BattlesPlayed}, earned {participant.CardsEarned} cards and won {participant.Wins} battles.");
-                }
-            }
-            {
-                Console.WriteLine($"Current clan {war.Clan.Name} status is {war.State}");
-            }
-            
             Console.ReadLine();
         }
     
