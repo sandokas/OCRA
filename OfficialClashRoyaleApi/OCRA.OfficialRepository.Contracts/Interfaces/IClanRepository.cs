@@ -8,7 +8,6 @@ namespace OCRA.Repositories.Official.Contracts.Interfaces
     public interface IClanRepository
     {
         IList<Member> GetClanMembersByTag(string tag);
-        War GetCurrentWarByTag(string tag);
         Clan GetClanByTag(string tag);
         void GetCurrentRiverRaceByTag(string tag);
         void GetLastRiverRaceByTag(string tag);
