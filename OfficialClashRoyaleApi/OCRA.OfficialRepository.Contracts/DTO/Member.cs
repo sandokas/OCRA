@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace OCRA.Repositories.Official.Contracts.DTO
 {
@@ -9,7 +10,9 @@ namespace OCRA.Repositories.Official.Contracts.DTO
     {
         public string Tag { get; set; }
         public string Name { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public Role Role { get; set; }
+        public string LastSeen { get; set; }
         public int ExpLevel { get; set; }
         public int Trophies { get; set; }
         public Arena Arena { get; set; }
